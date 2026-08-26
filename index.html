@@ -1,1 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechBytes - Programação & Curiosidades</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-primary: #c9d1d9;
+            --text-heading: #58a6ff;
+            --accent-neon: #00f2fe;
+            --accent-purple: #7928ca;
+            --border-color: #30363d;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-neon);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-neon);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-neon);
+        }
+
+        .post-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+
+        .post-card.hidden {
+            display: none;
+        }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .post-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-neon));
+            color: #fff;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .post-title {
+            color: var(--text-heading);
+            margin: 0.8rem 0;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-title {
+            color: var(--accent-neon);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            margin: 0.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--accent-neon);
+            color: #0d1117;
+            border-color: var(--accent-neon);
+            font-weight: bold;
+        }
+
+        #no-results {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">&lt;TechBytes /&gt;</a>
+        <nav>
+            <a href="#">Início</a>
+            <a href="#">Artigos</a>
+            <a href="#">Curiosidades</a>
+            <a href="#">Sobre</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <!-- Barra de Pesquisa -->
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Pesquisar por palavra-chave ou título...">
+
+            <div id="no-results">Nenhum artigo encontrado para a busca.</div>
+
+            <!-- Posts -->
+            <article class="post-card" data-category="curiosidade">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" alt="Código no monitor" class="post-img">
+                <div class="post-content">
+                    <span class="tag" onclick="filterByTag('curiosidade')">Curiosidade</span>
+                    <h2 class="post-title">Por que o primeiro erro de software foi chamado de "Bug"?</h2>
+                    <p>Em 1947, a pioneira Grace Hopper encontrou uma mariposa real presa nos relés do computador Harvard Mark II. O inseto causou uma falha no sistema, e ao removê-lo, a equipe registrou no diário de bordo: "Primeiro caso atual de bug sendo encontrado".</p>
+                </div>
+            </article>
+
+            <article class="post-card" data-category="tecnologia">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="Placa de circuito e tecnologia" class="post-img">
+                <div class="post-content">
+                    <span class="tag" onclick="filterByTag('tecnologia')">Tecnologia</span>
+                    <h2 class="post-title">O que é Computação Quântica e como ela altera a criptografia?</h2>
+                    <p>Diferente dos computadores clássicos que usam bits (0 ou 1), os computadores quânticos usam qubits capazes de estar em sobreposição. Isso permite processar cálculos complexos em segundos, redefinindo a segurança digital global.</p>
+                </div>
+            </article>
+
+            <article class="post-card" data-category="programacao">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Código Matrix verde" class="post-img">
+                <div class="post-content">
+                    <span class="tag" onclick="filterByTag('programacao')">Programação</span>
+                    <h2 class="post-title">Como o Python se tornou a linguagem número 1 para IA?</h2>
+                    <p>Sua sintaxe limpa combinada a um ecossistema robusto de bibliotecas como TensorFlow, PyTorch e NumPy transformou o Python no padrão da indústria para Ciência de Dados e Aprendizado de Máquina.</p>
+                </div>
+            </article>
+        </main>
+
+        <aside>
+            <div class="sidebar-box">
+                <h3 class="sidebar-title">Sobre o Blog</h3>
+                <p>Explorando o universo do código, arquitetura de software, hardware e as histórias mais interessantes do mundo da tecnologia.</p>
+            </div>
+
+            <!-- Filtros por Categoria -->
+            <div class="sidebar-box">
+                <h3 class="sidebar-title">Filtrar por Categoria</h3>
+                <div id="categoryFilters">
+                    <button class="filter-btn active" onclick="filterByTag('all')">Todos</button>
+                    <button class="filter-btn" onclick="filterByTag('curiosidade')">Curiosidades</button>
+                    <button class="filter-btn" onclick="filterByTag('tecnologia')">Tecnologia</button>
+                    <button class="filter-btn" onclick="filterByTag('programacao')">Programação</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 TechBytes Blog. Desenvolvido com HTML5, CSS3 e JS Puro.</p>
+    </footer>
+
+    <!-- SCRIPT DE FILTRO E BUSCA -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const posts = document.querySelectorAll('.post-card');
+        const noResults = document.getElementById('no-results');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        let currentCategory = 'all';
+
+        // Evento de busca por texto em tempo real
+        searchInput.addEventListener('input', applyFilters);
+
+        // Função de filtro por Tag/Categoria
+        function filterByTag(category) {
+            currentCategory = category;
+
+            // Atualiza botões ativos
+            filterBtns.forEach(btn => {
+                if (btn.getAttribute('onclick') === `filterByTag('${category}')`) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            applyFilters();
+        }
+
+        // Aplica busca por palavra-chave E filtro por categoria juntos
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            posts.forEach(post => {
+                const title = post.querySelector('.post-title').textContent.toLowerCase();
+                const text = post.querySelector('p').textContent.toLowerCase();
+                const category = post.getAttribute('data-category');
+
+                const matchesSearch = title.includes(searchTerm) || text.includes(searchTerm);
+                const matchesCategory = (currentCategory === 'all' || category === currentCategory);
+
+                if (matchesSearch && matchesCategory) {
+                    post.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    post.classList.add('hidden');
+                }
+            });
+
+            // Mensagem quando nada é encontrado
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
